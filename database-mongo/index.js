@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/fetcher');
 
 var db = mongoose.connection;
 
@@ -11,15 +11,20 @@ db.once('open', function() {
   console.log('mongoose connected successfully');
 });
 
-var itemSchema = mongoose.Schema({
-  quantity: Number,
-  description: String
+var neoSchema = mongoose.Schema({
+  neo_reference_id: Number,
+  name: String,
+  nasa_jpl_url: String,
+  estimated_diameter_max: Number,
+  relative_velocity: Number,
+  close_approach_date: String,
+  miss_distance: Number,
 });
 
-var Item = mongoose.model('Item', itemSchema);
+var Neo = mongoose.model('Neo', neoSchema);
 
 var selectAll = function(callback) {
-  Item.find({}, function(err, items) {
+  Neo.find({}, function(err, items) {
     if(err) {
       callback(err, null);
     } else {
@@ -28,4 +33,5 @@ var selectAll = function(callback) {
   });
 };
 
+module.exports.Neo = Neo;
 module.exports.selectAll = selectAll;

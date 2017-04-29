@@ -10,6 +10,7 @@ class App extends React.Component {
     this.state = {
       startDate: '',
       endDate: '',
+      showError: false,
       neos: []
     };
 
@@ -58,11 +59,14 @@ class App extends React.Component {
       success: (data) => {
         console.log('client post successful');
         context.setState({
-          neos: JSON.parse(data)
+          neos: JSON.parse(data),
+          showError: false
         });
       },
       error: () => {
-        console.log(err);
+        context.setState({
+          showError: true
+        });
       }
     });
   }
@@ -76,6 +80,7 @@ class App extends React.Component {
       <div>End date</div>
       <input id="end-date" placeholder="YYYY-MM-DD" onChange={this.onEndDateChange}></input>
       <button name="neo" onClick={this.search}>Submit</button>
+      <div>{this.state.showError ? 'Date max range is 7 days.' : ''}</div>
       <NEOList neos={this.state.neos}/>
     </div>)
   }

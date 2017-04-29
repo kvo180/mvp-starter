@@ -4,6 +4,7 @@ var items = require('../database-mongo');
 var bluebird = require('bluebird');
 var request = require('request-promise');
 var apiKey = require('./config/nasa.js');
+var db = require('../database-mongo/index.js');
 
 var app = express();
 
@@ -33,22 +34,29 @@ app.post('/neos/import', function(req, res) {
 
   request(options)
   .then((data) => {
-    var neos = data.near_earth_objects;
+    if (data.near_earth_objects) {
+      var neos = data.near_earth_objects;
 
-    parseNeosData(neos, (neosData) => {
-      res.end(JSON.stringify(neosData));
-    });
+      parseNeosData(neos, (neosArray) => {
+        res.end(JSON.stringify(neosArray));
+      });
+    }
   })
   .catch((err) => {
-    console.log(err);
+    res.sendStatus(404);
   });
 });
+
+var addNeosToDatabase = (neosArray, callback) => {
+
+};
 
 var parseNeosData = (data, callback) => {
   var allData = [];
   for (var key in data) {
     allData = allData.concat(data[key]);
   }
+  console.log(typeof allData[0].close_approach_data[0].relative_velocity.miles_per_hour)
   callback(allData);
 };
 
