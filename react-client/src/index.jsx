@@ -17,6 +17,7 @@ class App extends React.Component {
     this.search = this.search.bind(this);
     this.onStartDateChange = this.onStartDateChange.bind(this);
     this.onEndDateChange = this.onEndDateChange.bind(this);
+    this.getNeos = this.getNeos.bind(this);
   }
 
   onStartDateChange(startDate) {
@@ -31,19 +32,28 @@ class App extends React.Component {
     });
   }
 
-  // componentDidMount() {
-  //   $.ajax({
-  //     url: '/items',
-  //     success: (data) => {
-  //       this.setState({
-  //         items: data
-  //       })
-  //     },
-  //     error: (err) => {
-  //       console.log('err', err);
-  //     }
-  //   });
-  // }
+  componentDidMount() {
+    this.getNeos();
+  }
+
+  getNeos() {
+    var context = this;
+
+    $.ajax({
+      type: 'GET',
+      url: '/neos',
+      contentType: 'application/json',
+      success: (data) => {
+        context.setState({
+          neos: data,
+          showError: false
+        });
+      },
+      error: (err) => {
+        console.log('err', err);
+      }
+    });
+  }
 
   search() {
     var context = this;
@@ -56,12 +66,9 @@ class App extends React.Component {
         endDate: context.state.endDate
       }),
       contentType: "application/json",
-      success: (data) => {
+      success: () => {
         console.log('client post successful');
-        context.setState({
-          neos: JSON.parse(data),
-          showError: false
-        });
+        context.getNeos();
       },
       error: () => {
         context.setState({

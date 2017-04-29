@@ -3,7 +3,7 @@ import NEOListItem from './NEOListItem.jsx';
 
 const NEOList = (props) => {
   var neosArray = props.neos.map((neo) => {
-    return <NEOListItem key={neo['neo_reference_id']} neo={neo}/>;
+    return <NEOListItem key={neo.neoId} neo={neo}/>;
   });
 
   return (

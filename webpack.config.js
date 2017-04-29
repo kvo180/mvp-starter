@@ -19,9 +19,9 @@ module.exports = {
        }
       }
     ]
-  },
-  devServer: {
-    inline: true,
-    port: 1983
-  },
+  }
+  // devServer: {
+  //   inline: true,
+  //   port: 1983
+  // },
 };

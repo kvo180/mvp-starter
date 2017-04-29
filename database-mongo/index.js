@@ -12,24 +12,25 @@ db.once('open', function() {
 });
 
 var neoSchema = mongoose.Schema({
-  neo_reference_id: Number,
+  neoId: Number,
   name: String,
-  nasa_jpl_url: String,
-  estimated_diameter_max: Number,
-  relative_velocity: Number,
-  close_approach_date: String,
-  miss_distance: Number,
+  url: String,
+  diameter: Number,
+  velocity: Number,
+  approachDate: String,
+  missDistance: Number,
+  hazardous: Boolean
 });
 
 var Neo = mongoose.model('Neo', neoSchema);
 
 var selectAll = function(callback) {
-  Neo.find({}, function(err, items) {
-    if(err) {
-      callback(err, null);
-    } else {
-      callback(null, items);
-    }
+  Neo.find({}).sort('-approachDate')
+  .then((neos) => {
+    callback(null, neos);
+  })
+  .catch((err) => {
+    callback(err, null);
   });
 };
 
