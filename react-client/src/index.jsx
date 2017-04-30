@@ -18,6 +18,7 @@ class App extends React.Component {
     this.onStartDateChange = this.onStartDateChange.bind(this);
     this.onEndDateChange = this.onEndDateChange.bind(this);
     this.getNeos = this.getNeos.bind(this);
+    this.countHazardousNeos = this.countHazardousNeos.bind(this);
   }
 
   onStartDateChange(startDate) {
@@ -47,12 +48,30 @@ class App extends React.Component {
         context.setState({
           neos: data,
           showError: false
+        }, () => {
+          context.countHazardousNeos();
         });
       },
       error: (err) => {
         console.log('err', err);
       }
     });
+  }
+
+
+
+  countHazardousNeos() {
+    var hazardCount = 0;
+
+    this.state.neos.forEach((neo) => {
+      if (neo.hazardous) {
+        hazardCount++;
+      }
+    });
+
+    if (hazardCount > 0) {
+      alert(`There are ${hazardCount} potentially dangerous asteroids!!`);
+    }
   }
 
   search() {
