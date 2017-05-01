@@ -10,8 +10,67 @@ var app = express();
 app.use(express.static(__dirname + '/../react-client/dist'));
 app.use(bodyParser.json());
 
-app.get('/neos', function (req, res) {
-  db.selectAll(function(err, data) {
+app.get('/photos', function(req, res) {
+  db.selectAllPhotos(function(err, data) {
+    if(err) {
+      res.sendStatus(500);
+    } else {
+      res.json(data);
+    }
+  });
+});
+
+app.post('/photos/import', function(req, res) {
+  var key = apiKey();
+
+  var options = {
+    url: `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&page=2&api_key=${key}`,
+    method: 'GET',
+    json: true
+  }
+
+  request(options)
+  .then((data) => {
+    console.log(data);
+    if (data.photos) {
+      var photos = data.photos;
+
+      addPhotosToDatabase(photos, () => {
+        res.end();
+      });
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+    res.sendStatus(404);
+  });
+});
+
+var addPhotosToDatabase = (photosArray, callback) => {
+  photosArray.forEach((photo) => {
+    var photoObj = {
+      id: parseInt(photo.id),
+      cameraName: photo.camera.name,
+      cameraFullName: photo.camera.full_name,
+      src: photo.img_src,
+      date: photo.earth_date
+    }
+
+    var photoModel = new db.Photo(photoObj);
+    photoModel.save()
+    .then(() => {
+      console.log('photo saved to database');
+    })
+    .catch((err) => {
+      return console.error(err);
+    });
+  });
+
+  callback();
+};
+
+app.get('/neos', function(req, res) {
+  db.selectAllNeos(function(err, data) {
     if(err) {
       res.sendStatus(500);
     } else {
@@ -64,7 +123,7 @@ var addNeosToDatabase = (neosArray, callback) => {
     var neoModel = new db.Neo(neoObj);
     neoModel.save()
     .then(() => {
-      console.log('saved to database');
+      console.log('neo saved to database');
     })
     .catch((err) => {
       return console.error(err);

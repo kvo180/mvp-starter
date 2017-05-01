@@ -12,7 +12,7 @@ db.once('open', function() {
 });
 
 var neoSchema = mongoose.Schema({
-  neoId: {type: Number, unique: true},
+  neoId: {type: Number, unique: true, dropDups: true},
   name: String,
   url: String,
   diameter: Number,
@@ -24,7 +24,7 @@ var neoSchema = mongoose.Schema({
 
 var Neo = mongoose.model('Neo', neoSchema);
 
-var selectAll = function(callback) {
+var selectAllNeos = function(callback) {
   Neo.find({}).sort('-approachDate')
   .then((neos) => {
     callback(null, neos);
@@ -34,5 +34,27 @@ var selectAll = function(callback) {
   });
 };
 
+var photoSchema = mongoose.Schema({
+  id: {type: Number, unique: true, dropDups: true},
+  cameraName: String,
+  cameraFullName: String,
+  src: String,
+  date: String
+});
+
+var Photo = mongoose.model('Photo', photoSchema);
+
+var selectAllPhotos = function(callback) {
+  Photo.find({}).sort('-earthDate')
+  .then((neos) => {
+    callback(null, neos);
+  })
+  .catch((err) => {
+    callback(err, null);
+  });
+};
+
 module.exports.Neo = Neo;
-module.exports.selectAll = selectAll;
+module.exports.selectAllNeos = selectAllNeos;
+module.exports.Photo = Photo;
+module.exports.selectAllPhotos = selectAllPhotos;

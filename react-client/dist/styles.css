@@ -11,9 +11,26 @@ th, td {
   padding: 15px;
 }
 
-tr {
+tr[name="neoRow"] {
   cursor: pointer;
   margin-bottom: 15px;
+}
+
+button[name="showNeos"], button[name="showRovers"] {
+    background-color: #4180f4;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    margin: 0px 30px 10px 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#photosCount {
+  margin: 30px;
 }
 
 /*

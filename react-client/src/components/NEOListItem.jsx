@@ -2,7 +2,7 @@ import React from 'react';
 
 const NEOListItem = (props) => {
   return (
-    <tr style={props.style}>
+    <tr style={props.style} name="neoRow">
       <td><a style={props.style} href={props.neo.url} target="_blank">{ props.neo.name }</a></td>
       <td><a style={props.style} href={props.neo.url} target="_blank">{props.neo.diameter}</a></td>
       <td><a style={props.style} href={props.neo.url} target="_blank">{props.neo.velocity}</a></td>

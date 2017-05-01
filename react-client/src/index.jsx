@@ -13,7 +13,9 @@ class App extends React.Component {
       showNeos: false,
       showRovers: false,
       showError: false,
-      neos: []
+      neos: [],
+      photos: [],
+      index: 0
     };
 
     this.toggleShowNeos = this.toggleShowNeos.bind(this);
@@ -23,6 +25,9 @@ class App extends React.Component {
     this.onEndDateChange = this.onEndDateChange.bind(this);
     this.getNeos = this.getNeos.bind(this);
     this.countHazardousNeos = this.countHazardousNeos.bind(this);
+    this.getPhotos = this.getPhotos.bind(this);
+    this.showNext = this.showNext.bind(this);
+    this.showPrev = this.showPrev.bind(this);
   }
 
   onStartDateChange(startDate) {
@@ -39,6 +44,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getNeos();
+    this.getPhotos();
   }
 
   toggleShowNeos() {
@@ -60,6 +66,23 @@ class App extends React.Component {
   toggleShowRovers() {
     this.setState({
       showRovers: !this.state.showRovers
+    }, () => {
+      if (this.state.showRovers) {
+        var context = this;
+
+        $.ajax({
+          type: 'POST',
+          url: '/photos/import',
+          contentType: "application/json",
+          success: () => {
+            console.log('client post successful');
+            context.getPhotos();
+          },
+          error: () => {
+            console.log('error retrieving photos');
+          }
+        });
+      }
     });
 
     if (this.state.showNeos) {
@@ -129,13 +152,50 @@ class App extends React.Component {
     });
   }
 
-  render () {
+  getPhotos() {
+    var context = this;
 
+    $.ajax({
+      type: 'GET',
+      url: '/photos',
+      contentType: 'application/json',
+      success: (data) => {
+        context.setState({
+          photos: data
+        }, () => {
+          console.log('photos retrieved');
+        });
+      },
+      error: (err) => {
+        console.log('err', err);
+      }
+    });
+  }
+
+  showNext() {
+    var next = this.state.index + 1;
+    if (next < this.state.photos.length) {
+      this.setState({
+        index: next
+      });
+    }
+  }
+
+  showPrev() {
+    var prev = this.state.index - 1;
+    if (prev >= 0) {
+      this.setState({
+        index: prev
+      });
+    }
+  }
+
+  render () {
     return (
     <div>
       <h1>Space Ops</h1>
-        <button name="showNeos" onClick={this.toggleShowNeos}>Near Earth Objects</button>
-        <button name="showRovers" onClick={this.toggleShowRovers}>Curiosity Rover Photos</button>
+        <button name="showNeos" onClick={this.toggleShowNeos}>Near Earth Object Detection</button>
+        <button name="showRovers" onClick={this.toggleShowRovers}>View Curiosity Rover Photos</button>
         {this.state.showNeos ?
           <div id="neos">
             <div>Start date</div>
@@ -148,9 +208,18 @@ class App extends React.Component {
           </div> : null}
         {this.state.showRovers ?
           <div id="rovers">
-            <button name="prev" >Prev Image</button>
-            <button name="next" >Next Image</button>
-            <div></div>
+            <button name="prev" onClick={this.showPrev}>Prev Image</button>
+            <button name="next" onClick={this.showNext}>Next Image</button>
+            <div id="photosCount">
+              {`Photo ${this.state.index + 1} of ${this.state.photos.length}`}
+            </div>
+            {this.state.photos.length > 0 ?
+              <div>
+                <h2>Curiosity Rover - Mars</h2>
+                <h3>{`${this.state.photos[this.state.index].cameraName} (${this.state.photos[this.state.index].cameraFullName})`}</h3>
+                <h4>{`${this.state.photos[this.state.index].date}`}</h4>
+                <img src={this.state.photos[this.state.index].src} alt="Rover Photo" />
+              </div> : null}
           </div> : null}
     </div>)
   }
