@@ -3,7 +3,6 @@ import NEOListItem from './NEOListItem.jsx';
 
 const NEOList = (props) => {
   var neosArray = props.neos.map((neo) => {
-    console.log(neo.hazardous);
     return <NEOListItem key={neo.neoId} neo={neo} style={neo.hazardous ?
       {color: 'red', fontWeight: 'bold', textDecoration: 'none'} :
       {color: 'black', fontWeight: 'normal', textDecoration: 'none'}}/>;

@@ -44,6 +44,10 @@ class App extends React.Component {
   toggleShowNeos() {
     this.setState({
       showNeos: !this.state.showNeos
+    }, () => {
+      if (this.state.showNeos) {
+        this.countHazardousNeos();
+      }
     });
 
     if (this.state.showRovers) {
@@ -77,7 +81,9 @@ class App extends React.Component {
           neos: data,
           showError: false
         }, () => {
-          context.countHazardousNeos();
+          if (context.state.showNeos) {
+            context.countHazardousNeos();
+          }
         });
       },
       error: (err) => {
@@ -96,7 +102,7 @@ class App extends React.Component {
     });
 
     if (hazardCount > 0) {
-      // alert(`There are ${hazardCount} potentially dangerous asteroids!!`);
+      alert(`WARNING: There are ${hazardCount} potentially dangerous asteroids!!`);
     }
   }
 
@@ -129,7 +135,7 @@ class App extends React.Component {
     <div>
       <h1>Space Ops</h1>
         <button name="showNeos" onClick={this.toggleShowNeos}>Near Earth Objects</button>
-        <button name="showRovers" onClick={this.toggleShowRovers}>Rover Photos</button>
+        <button name="showRovers" onClick={this.toggleShowRovers}>Curiosity Rover Photos</button>
         {this.state.showNeos ?
           <div id="neos">
             <div>Start date</div>
@@ -142,7 +148,9 @@ class App extends React.Component {
           </div> : null}
         {this.state.showRovers ?
           <div id="rovers">
-            TEST
+            <button name="prev" >Prev Image</button>
+            <button name="next" >Next Image</button>
+            <div></div>
           </div> : null}
     </div>)
   }
