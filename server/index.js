@@ -24,7 +24,7 @@ app.post('/photos/import', function(req, res) {
   var key = apiKey();
 
   var options = {
-    url: `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&page=2&api_key=${key}`,
+    url: `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&page=1&api_key=${key}`,
     method: 'GET',
     json: true
   }
