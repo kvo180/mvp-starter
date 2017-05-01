@@ -192,7 +192,7 @@ class App extends React.Component {
 
   render () {
     return (
-    <div>
+    <div name="main">
       <h1>Space Ops</h1>
         <button name="showNeos" onClick={this.toggleShowNeos}>Near Earth Object Detection</button>
         <button name="showRovers" onClick={this.toggleShowRovers}>View Curiosity Rover Photos</button>

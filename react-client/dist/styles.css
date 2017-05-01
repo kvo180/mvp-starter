@@ -1,3 +1,8 @@
+div[name="main"] {
+  width: 850px;
+  margin: 0 auto;
+}
+
 table {
   border-collapse: separate;
   border-spacing: 0 10px;
