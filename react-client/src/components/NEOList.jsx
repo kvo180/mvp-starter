@@ -9,7 +9,7 @@ const NEOList = (props) => {
   return (
   <div>
     <h4> Near Earth Objects </h4>
-    There are { props.neos.length } near earth objects since
+    There are { props.neos.length } near earth objects.
     <div>
       <table>
         <thead>

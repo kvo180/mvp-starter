@@ -1,0 +1,24 @@
+table {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+th, td {
+  padding: 15px;
+}
+
+tr {
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+/*
+TODO:
+- highlight row upon hover
+- clicking row opens url
+- change text to bold red if hazardous
+*/

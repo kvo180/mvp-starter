@@ -10,10 +10,14 @@ class App extends React.Component {
     this.state = {
       startDate: '',
       endDate: '',
+      showNeos: false,
+      showRovers: false,
       showError: false,
       neos: []
     };
 
+    this.toggleShowNeos = this.toggleShowNeos.bind(this);
+    this.toggleShowRovers = this.toggleShowRovers.bind(this);
     this.search = this.search.bind(this);
     this.onStartDateChange = this.onStartDateChange.bind(this);
     this.onEndDateChange = this.onEndDateChange.bind(this);
@@ -37,6 +41,30 @@ class App extends React.Component {
     this.getNeos();
   }
 
+  toggleShowNeos() {
+    this.setState({
+      showNeos: !this.state.showNeos
+    });
+
+    if (this.state.showRovers) {
+      this.setState({
+        showRovers: false
+      });
+    }
+  }
+
+  toggleShowRovers() {
+    this.setState({
+      showRovers: !this.state.showRovers
+    });
+
+    if (this.state.showNeos) {
+      this.setState({
+        showNeos: false
+      });
+    }
+  }
+
   getNeos() {
     var context = this;
 
@@ -58,8 +86,6 @@ class App extends React.Component {
     });
   }
 
-
-
   countHazardousNeos() {
     var hazardCount = 0;
 
@@ -70,7 +96,7 @@ class App extends React.Component {
     });
 
     if (hazardCount > 0) {
-      alert(`There are ${hazardCount} potentially dangerous asteroids!!`);
+      // alert(`There are ${hazardCount} potentially dangerous asteroids!!`);
     }
   }
 
@@ -98,16 +124,26 @@ class App extends React.Component {
   }
 
   render () {
+
     return (
     <div>
       <h1>Space Ops</h1>
-      <div>Start date</div>
-      <input id="start-date" placeholder="YYYY-MM-DD" onChange={this.onStartDateChange}></input>
-      <div>End date</div>
-      <input id="end-date" placeholder="YYYY-MM-DD" onChange={this.onEndDateChange}></input>
-      <button name="neo" onClick={this.search}>Submit</button>
-      <div>{this.state.showError ? 'Date max range is 7 days.' : ''}</div>
-      <NEOList neos={this.state.neos}/>
+        <button name="showNeos" onClick={this.toggleShowNeos}>Near Earth Objects</button>
+        <button name="showRovers" onClick={this.toggleShowRovers}>Rover Photos</button>
+        {this.state.showNeos ?
+          <div id="neos">
+            <div>Start date</div>
+            <input id="start-date" placeholder="YYYY-MM-DD" onChange={this.onStartDateChange}></input>
+            <div>End date</div>
+            <input id="end-date" placeholder="YYYY-MM-DD" onChange={this.onEndDateChange}></input>
+            <button name="neoSubmit" onClick={this.search}>Submit</button>
+            <div>{this.state.showError ? 'Date max range is 7 days.' : ''}</div>
+            <NEOList neos={this.state.neos}/>
+          </div> : null}
+        {this.state.showRovers ?
+          <div id="rovers">
+            TEST
+          </div> : null}
     </div>)
   }
 }

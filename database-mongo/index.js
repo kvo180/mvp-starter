@@ -12,7 +12,7 @@ db.once('open', function() {
 });
 
 var neoSchema = mongoose.Schema({
-  neoId: Number,
+  neoId: {type: Number, unique: true},
   name: String,
   url: String,
   diameter: Number,
